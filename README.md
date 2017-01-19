@@ -1,4 +1,4 @@
-# airplay-lib
+# libairplay
 
 A C++ library to stream photos and videos via Airplay.
 

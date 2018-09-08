@@ -14,7 +14,7 @@ int main() {
 
     std::cout << "[+] Connecting to device:" << std::endl;
     airplay_device appletv(devices.at("Living Room Apple TV"));
-    std::cout << appletv.get_services() << std::endl;
+    std::cout << appletv.send_message(MessageType::GetServices) << std::endl;
 
     return 0;
 }

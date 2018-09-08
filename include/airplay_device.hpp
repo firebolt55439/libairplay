@@ -5,12 +5,16 @@
 #include "address.hpp"
 #include "safe_socket.hpp"
 
-struct AirplayImage {
-    uint32_t size;
-    void* data;
+enum class MessageType : uint32_t {
+    GetServices = 0,
+    PlayVideo,
+    PauseVideo,
+    ResumeVideo,
+    StopPlayback,
+    GetSlideshowFeatures,
+    ShowPicture,
+    StopPicture,
 };
-
-enum class MessageType : uint32_t;
 
 class airplay_device {
 public:
@@ -19,10 +23,9 @@ public:
     {}
     ~airplay_device() = default;
 
-    std::string get_services();
-    std::string get_slideshow_features();
-
-    // TODO: Export more functions
+    std::string send_message(MessageType type);
+    std::string send_message(MessageType type, const std::string& args);
+    std::string send_message(MessageType type, const buffer& args);
 
 private:
     const std::unique_ptr<safe_socket> _socket;
@@ -31,6 +34,5 @@ private:
     static const std::string APPLE_SESSION_ID;
 
     static std::unique_ptr<safe_socket> connect_to_device(const address& addr);
-    std::string send_message(MessageType type, std::string args);
-    static std::string build_message(MessageType type, std::string args);
+    static std::string build_message(MessageType type, const std::string& args);
 };

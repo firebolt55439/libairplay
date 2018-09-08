@@ -4,7 +4,7 @@ SRCDIR=src/
 OBJDIR=obj/
 
 CC=clang++
-CFLAGS=-c -std=c++11 -g -O2 -Wall -Wno-unused-function -Wshadow -fno-rtti -fblocks
+CFLAGS=-c -std=c++11 -Iinclude/ -g -O2 -Wall -Wno-unused-function -Wshadow -fno-rtti -fblocks
 LDFLAGS=-stdlib=libc++ -lpthread -g
 
 SRCS=$(wildcard $(SRCDIR)*.cpp)

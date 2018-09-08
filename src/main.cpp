@@ -1,6 +1,8 @@
 #include <iostream>
 
+#include "Discover.h"
+
 int main() {
-    // TODO
-    std::cout << "Hello" << std::endl;
+    AirplayBrowser browser;
+    browser.browseForDevices();
 }

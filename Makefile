@@ -1,26 +1,35 @@
-CXX=clang++
-CXXFLAGS=-c -std=c++11 -g -O2 -Wall -Wno-unused-function -Wshadow -fno-rtti -fblocks
+TARGET=libairplay
+
+SRCDIR=src/
+OBJDIR=obj/
+BINDIR=bin/
+
+CC=clang++
+CFLAGS=-c -std=c++11 -g -O2 -Wall -Wno-unused-function -Wshadow -fno-rtti -fblocks
 LDFLAGS=-stdlib=libc++ -lpthread -g
-SOURCES=$(wildcard src/*.cpp)
-OBJECTS=$(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
-EXECUTABLE=bin/airplay
-DEPS=$(wildcard obj/*.d)
 
-airplay: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+SRCS=$(wildcard $(SRCDIR)*.cpp)
+OBJS=$(addprefix $(OBJDIR),$(notdir $(SRCS:.cpp=.o)))
+EXECUTABLE=$(BINDIR)$(TARGET)
+DEPS=$(wildcard $(OBJDIR)*.d)
+
+.PHONY: all
+all: $(TARGET)
+
+.PHONY: dirs
+dirs:
+	mkdir -p $(OBJDIR) $(BINDIR)
+
+$(TARGET): $(OBJS) dirs
+	$(CC) $(LDFLAGS) $(OBJS) -o $(EXECUTABLE)
 	dsymutil $(EXECUTABLE)
-	cp $(EXECUTABLE) ./
 
-obj/%.o: src/%.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
-	$(CXX) -MM -MP -MT $@ -MT obj/$*.d $(CXXFLAGS) $< > obj/$*.d
+$(OBJDIR)%.o: $(SRCDIR)%.cpp dirs
+	$(CC) $(CFLAGS) $< -o $@
+	$(CC) -MM -MP -MT $@ -MT $(OBJDIR)$*.d $(CFLAGS) $< > obj/$*.d
 
 -include $(DEPS)
 
-git:
-	git commit -a
-
+.PHONY: clean
 clean:
-	rm obj/*.o
-	rm obj/*.d
-	rm bin/*
+	rm -rf $(OBJDIR) $(BINDIR)

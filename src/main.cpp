@@ -5,7 +5,7 @@
 #include "airplay_device.hpp"
 #include "airplay_browser.hpp"
 
-int main() {
+__attribute__((weak)) int main() {
     std::cout << "[+] Fetching AirPlay devices:" << std::endl;
     const auto devices = airplay_browser::get_devices();
     for (auto device : devices) {
